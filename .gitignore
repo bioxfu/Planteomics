@@ -3,8 +3,6 @@ RData/
 archive/
 figures/
 old/
-table_20180427/
-table_20180510/
-tables/
-
-
+table*/
+TAIR10*
+kinase

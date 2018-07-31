@@ -32,7 +32,7 @@ stat <- do.call(cbind, lapply((tapply(x$Class, x$Experiment, table)), as.data.fr
 rownames(stat) <- stat[,1]
 stat <- stat[,grep('Freq', colnames(stat))]
 colnames(stat) <- sub('.Freq', '', colnames(stat))
-n <- colSums(stat)
+n <- stat['Class1',]
 stat <- stat[, order(n, decreasing = T)]
 
 dfm2 <- merge(dfm, t(stat), by.x = 2, by.y = 0)
@@ -41,6 +41,6 @@ write.table(dfm2, 'tables/class1-3_genes_summary.tsv', quote = F, sep = '\t', ro
 
 pdf('figures/class1-3_genes_barplot.pdf')
 par(mar=c(9,5,4,2))
-barplot(as.matrix(stat), legend.text = T, las=3, ylim=c(0, max(n)*1.1), ylab='Number of Genes')
+barplot(as.matrix(stat), beside = T, legend.text = T, las=3, ylim=c(0, max(n)*1.1), ylab='Number of Genes')
 dev.off()
 
