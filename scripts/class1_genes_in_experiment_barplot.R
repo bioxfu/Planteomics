@@ -24,3 +24,31 @@ bp <- barplot(gene_freq_sum, ylab='Number of Gene', xlab='Number of Experiment',
 text(bp, gene_freq_sum, gene_freq_sum, pos = 3)
 dev.off()
 
+## GO analysis of proteins which could serve as direct targets of multiple (4，5，6，7，8，9) protein kinases
+library(GO.db)
+source('scripts/topGO.R')
+
+gene_lst <- list(four  = rownames(gene_freq)[(rowSums(gene_freq) == 4)],
+                 five  = rownames(gene_freq)[(rowSums(gene_freq) == 5)],
+                 six   = rownames(gene_freq)[(rowSums(gene_freq) == 6)],
+                 seven = rownames(gene_freq)[(rowSums(gene_freq) == 7)],
+                 eight = rownames(gene_freq)[(rowSums(gene_freq) == 8)],
+                 nine  = rownames(gene_freq)[(rowSums(gene_freq) == 9)])
+                 
+
+go_lst <- list()
+for (i in 1:length(gene_lst)) {
+  go <- topGO(gene_lst[[i]])
+  go$Term <- apply(go, 1, function(x){Term(GOTERM[[x[1]]])})
+  go_lst[[i]] <- go
+}
+names(go_lst) <- names(gene_lst)
+
+library(xlsx)
+
+wb <- createWorkbook()
+for (i in 1:length(go_lst)) {
+  sheet <- createSheet(wb, sheetName=names(go_lst[i]))
+  addDataFrame(go_lst[[i]], sheet, row.names = FALSE)
+}
+saveWorkbook(wb, "tables/class1_genes_in_experiment_barplot_GO_Excel.xlsx")
