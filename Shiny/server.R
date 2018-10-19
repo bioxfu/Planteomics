@@ -2,6 +2,7 @@ library(shiny)
 library(jsonlite)
 library(DT)
 library(rCharts)
+library(dplyr)
 `%then%` <- shiny:::`%OR%`
 
 shinyServer(function(input, output){
@@ -17,8 +18,10 @@ shinyServer(function(input, output){
   })
   
   output$tbl1 <- renderDT({
-    tbl <- unique(passData1()$dfm[c('site', 'aa', 'window')])
-    colnames(tbl) <- c('Phosphorylation sites', 'Amino acid', 'Sequence window')
+    tbl <- passData1()$dfm[c('site', 'aa', 'window', 'experiment')]
+    tbl$experiment <- sub('_.+', '', tbl$experiment)
+    tbl <- unique(tbl) %>% group_by(site, aa, window) %>% summarise(kinase=toString(experiment)) %>% ungroup()
+    colnames(tbl) <- c('Phosphorylation sites', 'Amino acid', 'Sequence window', 'Kinase')
     rownames(tbl) <- NULL
     tbl
   })

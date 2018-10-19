@@ -45,11 +45,13 @@ dashboardPage(
             title = 'Result', status = 'success', solidHeader = TRUE, collapsible = TRUE, width = 12,
             fluidRow(
               box(
-                title = 'Phosphorylation sites', width = 6,
+                title = 'Phosphorylation sites', width = 12,
                 DTOutput('tbl1')
-              ),
+              )
+            ),
+            fluidRow(
               box(
-                title = 'Protein domains', width = 6, height = 200,
+                title = 'Protein domains', width = 12, height = 200,
                 imageOutput('img1')
               )
             ),
