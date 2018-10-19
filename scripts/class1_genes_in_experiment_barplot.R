@@ -28,12 +28,12 @@ dev.off()
 library(GO.db)
 source('scripts/topGO.R')
 
-gene_lst <- list(four  = rownames(gene_freq)[(rowSums(gene_freq) == 4)],
-                 five  = rownames(gene_freq)[(rowSums(gene_freq) == 5)],
-                 six   = rownames(gene_freq)[(rowSums(gene_freq) == 6)],
-                 seven = rownames(gene_freq)[(rowSums(gene_freq) == 7)],
-                 eight = rownames(gene_freq)[(rowSums(gene_freq) == 8)],
-                 nine  = rownames(gene_freq)[(rowSums(gene_freq) == 9)])
+gene_lst <- list(at_least_four  = rownames(gene_freq)[(rowSums(gene_freq) >= 4)],
+                 at_least_five  = rownames(gene_freq)[(rowSums(gene_freq) >= 5)],
+                 at_least_six   = rownames(gene_freq)[(rowSums(gene_freq) >= 6)],
+                 at_least_seven = rownames(gene_freq)[(rowSums(gene_freq) >= 7)],
+                 at_least_eight = rownames(gene_freq)[(rowSums(gene_freq) >= 8)],
+                 at_least_nine  = rownames(gene_freq)[(rowSums(gene_freq) >= 9)])
                  
 
 go_lst <- list()
