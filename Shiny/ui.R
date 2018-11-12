@@ -51,7 +51,7 @@ dashboardPage(
             ),
             fluidRow(
               box(
-                title = 'Protein domains', width = 12, height = 200,
+                title = 'Protein domains', width = 12, height = 400,
                 imageOutput('img1')
               )
             ),
