@@ -23,7 +23,7 @@ cat TAIR10_pep_20101214|fasta_formatter -t|sed 's/ | /\t/g'|cut -f1-3,5|sed 's/S
 # combine supp. tables #
 module add bedtools/2.25.0
 Rscript scripts/combine_supp_tables.R
-./scripts/format_table.py|sort -k2,2 -k4,4n -k7,7 -k8,8|uniq|groupBy -g 1-8 -c 9 -o sum > tables/combine_supp_tables_reformat.tsv
+./scripts/format_table.py|sort -k2,2 -k4,4n -k7,7 -k8,8 -k9,9|uniq|groupBy -g 1-9 -c 10 -o median > tables/combine_supp_tables_reformat.tsv
 
 ## protein domain
 wget -c ftp://ftp.arabidopsis.org/home/tair/Proteins/Domains/TAIR10_all.domains

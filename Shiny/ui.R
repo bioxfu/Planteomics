@@ -42,16 +42,22 @@ dashboardPage(
         ),
         fluidRow(
           box(
+            title = 'Description (source:TAIR10)', status = 'success', solidHeader = TRUE, collapsible = TRUE, width = 12,
+            textOutput('text1')
+          )
+        ),
+        fluidRow(
+          box(
             title = 'Result', status = 'success', solidHeader = TRUE, collapsible = TRUE, width = 12,
             fluidRow(
               box(
-                title = 'Phosphorylation sites', width = 12,
+                title = 'Phosphosite', width = 12,
                 DTOutput('tbl1')
               )
             ),
             fluidRow(
               box(
-                title = 'Protein domains', width = 12, height = 400,
+                title = 'Functional domain', width = 12, height = 400,
                 imageOutput('img1')
               )
             ),

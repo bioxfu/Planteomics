@@ -9,7 +9,7 @@ my_db <- src_sqlite(db_name, create = TRUE)
 
 ## Put data in the database
 phospho <- fread('../../tables/combine_supp_tables_reformat.tsv')
-colnames(phospho) <- c('siteID', 'gene', 'protein', 'site', 'aa', 'window', 'experiment', 'class', 'diff')
+colnames(phospho) <- c('siteID', 'gene', 'protein', 'site', 'aa', 'window', 'experiment', 'type', 'class', 'diff')
 copy_to(my_db, phospho, temporary = FALSE)
 
 desc <- fread('../../TAIR10_pep_desc_seq.tsv')
