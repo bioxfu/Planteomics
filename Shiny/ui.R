@@ -4,7 +4,7 @@ library(shinydashboard)
 library(rCharts)
 
 dashboardPage(
-  dashboardHeader(title = 'Planteomics', titleWidth = 180),
+  dashboardHeader(title = 'KSDB', titleWidth = 180),
   dashboardSidebar(
     width = 180,
     sidebarMenu(
