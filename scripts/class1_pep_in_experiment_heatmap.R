@@ -24,7 +24,7 @@ rownames(pep_freq) <- pep_freq$Group.1
 pep_freq <- pep_freq[, -1]
 colnames(pep_freq) <- sub('Experiment_', '', colnames(pep_freq))
 
-pdf('figures/class1_pep_in_experiment_heatmap.pdf', hei=8, wid=4)
+pdf('figures/class1_pep_in_experiment_heatmap.pdf', hei=10, wid=4)
 pheatmap(pep_freq, show_rownames = F, col=colorRampPalette(c('gray95', col_set[1]))(100), legend = F)
 dev.off()
 system('./scripts/pheatmap_pdf_cleaner.sh figures class1_pep_in_experiment_heatmap.pdf')
