@@ -19,7 +19,7 @@ function(id){
     list(msg = "gene ID is not given")
   }
   else {
-    dfm <- as.data.frame(filter(phospho, gene == id) %>% left_join(desc))
+    dfm <- as.data.frame(filter(phospho, gene == toupper(id)) %>% left_join(desc))
     if(nrow(dfm) > 0) {
       dfm
     }

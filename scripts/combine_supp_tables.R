@@ -12,14 +12,18 @@ for (i in 1:nrow(dfm)) {
   file <- paste0('table_20180510/Supplementary Table ', table_name, '.xlsx')
   cat(file, '\n')
   
-  t1 <- read_excel(file, sheet = 2, skip = 1) %>% select(Proteins, Sequence, 'Modified sequence') %>% mutate(Class='vitro', Diff=0, Experiment=expt)
-  t2 <- read_excel(file, sheet = 3, skip = 1) %>% select(Proteins='T: Proteins', Positions='T: Positions within proteins', Diff=contains("N: Student's T-test Difference")) %>% mutate(Class='vitro', Experiment=expt)
-  t3 <- read_excel(file, sheet = 4, skip = 1) %>% select(Proteins, Sequence, 'Modified sequence') %>% mutate(Class='vivo', Diff=0, Experiment=expt)
-  t4 <- read_excel(file, sheet = 5, skip = 1) %>% select(Proteins='T: Proteins', Positions='T: Positions within proteins', Diff=contains("N: Student's T-test Difference")) %>% mutate(Class='vivo', Experiment=expt)
-  
+  t1 <- read_excel(file, sheet = 2, skip = 1) %>% select(Proteins, Sequence, 'Modified sequence') %>% mutate(Type='vitro', Diff=0, Experiment=expt, Class='I')
+  t2 <- read_excel(file, sheet = 3, skip = 1) %>% select(Proteins='T: Proteins', Positions='T: Positions within proteins', Diff=contains("N: Student's T-test Difference")) %>% mutate(Type='vitro', Experiment=expt, Class='II')
+  t3 <- read_excel(file, sheet = 4, skip = 1) %>% select(Proteins, Sequence, 'Modified sequence') %>% mutate(Type='vivo', Diff=0, Experiment=expt, Class='unclassified')
+  t4 <- read_excel(file, sheet = 5, skip = 1) %>% select(Proteins='T: Proteins', Positions='T: Positions within proteins', Diff=contains("N: Student's T-test Difference")) %>% mutate(Type='vivo', Experiment=expt, Class='unclassified')
+  t5 <- read_excel(file, sheet = 6, skip = 1) %>% select(Proteins='T: Proteins', Positions='T: Positions within proteins', Diff=contains("N: Student's T-test Difference")) %>% mutate(Type='vitro_and_vivo', Experiment=expt, Class='III')
   detected <- rbind(detected, t1, t3)
-  induced <- rbind(induced, t2, t4)
-  
+  if (nrow(t5) > 0) {
+    induced <- rbind(induced, t2, t4, t5)
+  }
+  else {
+    induced <- rbind(induced, t2, t4)
+  }
 }
 
 detected <- filter(detected, !is.na(Proteins)) %>% as.data.frame()

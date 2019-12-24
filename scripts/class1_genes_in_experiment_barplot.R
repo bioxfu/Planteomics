@@ -19,9 +19,10 @@ gene_freq <- gene_freq[, -grep('MPK6_', colnames(gene_freq))]
 write.table(gene_freq, 'tables/class1_genes_in_experiment.tsv', quote=F, sep='\t', col.names = NA)
 gene_freq_sum <- table(rowSums(gene_freq))
 
-pdf('figures/class1_genes_in_experiment_barplot.pdf')
-bp <- barplot(gene_freq_sum, ylab='Number of Gene', xlab='Number of Experiment', ylim = c(0, max(gene_freq_sum)*1.1), col = col_set[2], border = NA)
-text(bp, gene_freq_sum, gene_freq_sum, pos = 3)
+pdf('figures/class1_genes_in_experiment_barplot.pdf', wid = 10)
+bp <- barplot(gene_freq_sum, ylab='Number of Gene', xlab='Number of Experiment', ylim = c(0, max(gene_freq_sum)*1.1), col = col_set[2], border = NA, space = 0.5, cex.axis = 1.2, cex.names = 1.2, cex.lab = 1.2)
+text(bp, gene_freq_sum, gene_freq_sum, pos = 3, cex = 1.2)
+box()
 dev.off()
 
 ## GO analysis of proteins which could serve as direct targets of multiple (4，5，6，7，8，9) protein kinases

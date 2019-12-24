@@ -15,7 +15,7 @@ with open('TAIR10_pep_desc_seq.tsv') as f:
 with open('tables/combine_supp_tables_detected.tsv') as f:
 	for line in f:
 		lst = line.strip().split('\t')
-		prots, pep, modpep, clas, diff, expt = lst
+		prots, pep, modpep, typ, diff, expt, clas = lst
 		modpep = re.sub('\(.+?\)', '', re.sub('\(18\)', '*', modpep))[1:-1]
 		for x in prots.split(';'):
 			if x.endswith('.1'):
@@ -33,12 +33,12 @@ with open('tables/combine_supp_tables_detected.tsv') as f:
 						pos_ext = pos[i] + 15
 						window = prot_ext[(pos_ext-16):(pos_ext+15)]
 						siteID = gene + '_' + str(pos[i]) + aa[i]
-						print siteID + '\t' + gene + '\t' + x + '\t' + str(pos[i]) + '\t' + aa[i] + '\t' + window + '\t' + expt + '\t' + clas + '\t' + diff
+						print siteID + '\t' + gene + '\t' + x + '\t' + str(pos[i]) + '\t' + aa[i] + '\t' + window + '\t' + expt + '\t' + typ + '\t' + clas + '\t' + diff
 
 with open('tables/combine_supp_tables_induced.tsv') as f:
 	for line in f:
 		lst = line.strip().split('\t')
-		prots, pos, diff, clas, expt = lst
+		prots, pos, diff, typ, expt, clas = lst
 		prots = prots.split(';')
 		pos = [int(x) for x in pos.split(';')]
 
@@ -53,5 +53,5 @@ with open('tables/combine_supp_tables_induced.tsv') as f:
 				pos_ext = p + 15
 				window = prot_ext[(pos_ext-16):(pos_ext+15)]
 				siteID = gene + '_' + str(p) + aa
-				print siteID + '\t' + gene + '\t' + x + '\t' + str(p) + '\t' + aa + '\t' + window + '\t' + expt + '\t' + clas + '\t' + diff
+				print siteID + '\t' + gene + '\t' + x + '\t' + str(p) + '\t' + aa + '\t' + window + '\t' + expt + '\t' + typ + '\t' + clas + '\t' + diff
 

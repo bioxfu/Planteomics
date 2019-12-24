@@ -41,6 +41,7 @@ write.table(dfm2, 'tables/class1-3_genes_summary.tsv', quote = F, sep = '\t', ro
 
 pdf('figures/class1-3_genes_barplot.pdf')
 par(mar=c(9,5,4,2))
+rownames(stat) <- c('Class I', 'Class II', 'Class III')
 barplot(as.matrix(stat), beside = T, legend.text = T, las=3, ylim=c(0, max(n)*1.1), ylab='Number of Genes')
 dev.off()
 

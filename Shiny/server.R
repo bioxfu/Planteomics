@@ -6,10 +6,10 @@ library(dplyr)
 `%then%` <- shiny:::`%OR%`
 
 shinyServer(function(input, output){
-  api_host <- 'http://10.41.9.210:8080'
+  api_host <- fromJSON('config.json')$api_host
   passData1 <- eventReactive(input$apply1, {
     geneID <- input$geneID
-    dfm <- fromJSON(paste0(api_host, "/gene?id=", geneID))[1:9]
+    dfm <- fromJSON(paste0(api_host, "/gene?id=", geneID))[1:12]
     shiny::validate(
       need(geneID, 'Please input TAIR geneID') %then%
       need(is.null(dfm$msg), 'No result has been found')
@@ -17,12 +17,24 @@ shinyServer(function(input, output){
     list(dfm=dfm)
   })
   
+  output$text1 <- renderText({
+    des <- unique(passData1()$dfm[,'description'])
+    prot <- unique(passData1()$dfm[,'protein'])
+    paste(des, '(', prot, ')')
+  })
+  
   output$tbl1 <- renderDT({
-    tbl <- passData1()$dfm[c('site', 'aa', 'window', 'experiment')]
-    tbl$experiment <- sub('_.+', '', tbl$experiment)
-    tbl <- unique(tbl) %>% group_by(site, aa, window) %>% summarise(kinase=toString(experiment)) %>% ungroup()
-    colnames(tbl) <- c('Phosphorylation sites', 'Amino acid', 'Sequence window', 'Kinase')
-    rownames(tbl) <- NULL
+    dfm <- passData1()$dfm
+    tbl_1 <- dfm[c('site', 'aa', 'window', 'experiment')]
+    tbl_2 <- dfm[c('site', 'aa', 'window', 'class')]
+    tbl_2$class[tbl_2$class=='I' | tbl_2$class=='unclassified'] <- ''
+    tbl_2$kinase <- paste(sub('_.+', '', tbl_1$experiment), '(', tbl_2$class, ')')
+    tbl_2$kinase[tbl_2$class==''] <- ''
+    tbl_1 <- unique(tbl_1) %>% group_by(site, aa, window) %>% summarise(experiment2=toString(experiment)) %>% ungroup()
+    tbl_2 <- unique(tbl_2) %>% group_by(site, aa, window) %>% summarise(kinase2=toString(kinase)) %>% ungroup()
+    tbl_2$kinase2 <- sub('^,', '', tbl_2$kinase2)
+    tbl <- merge(tbl_1, tbl_2, by.x=1, by.y=1)[c(1:4,7)]
+    colnames(tbl) <- c('Phosphosites', 'Amino acid', 'Sequence window', 'Experiment', 'Kinase')
     tbl
   })
   
@@ -46,23 +58,23 @@ shinyServer(function(input, output){
   
   output$chart1 <- renderChart2({
     dfm <- passData1()$dfm
-    dfm <- dfm[dfm$class == 'vitro' & dfm$diff != 0, c('site', 'experiment', 'class', 'diff')]
+    dfm <- dfm[dfm$type == 'vitro' & dfm$diff != 0, c('site', 'experiment', 'type', 'diff')]
     #print(dfm)
     p1 <- rPlot(diff ~ experiment | site, data=dfm, type='bar', color='experiment')
     p1$set(width = 800, height = 400)
-    p1$guides(y = list(title = 'Treatment - Mock'))
-    p1$guides(x = list(title = 'Experiment (in vitro)'))
+    p1$guides(y = list(title = 'log2 Ratio'),
+              x = list(title = 'Experiment (in vitro)', ticks=''))
     return(p1)
   })
   
   output$chart2 <- renderChart2({
     dfm <- passData1()$dfm
-    dfm <- dfm[dfm$class == 'vivo' & dfm$diff != 0, c('site', 'experiment', 'class', 'diff')]
+    dfm <- dfm[dfm$type == 'vivo' & dfm$diff != 0, c('site', 'experiment', 'type', 'diff')]
     #print(dfm)
     p1 <- rPlot(diff ~ experiment | site, data=dfm, type='bar', color='experiment')
     p1$set(width = 800, height = 400)
-    p1$guides(y = list(title = 'Treatment - Mock'))
-    p1$guides(x = list(title = 'Experiment (in vivo)'))
+    p1$guides(y = list(title = 'log2 Ratio'),
+              x = list(title = 'Experiment (in vivo)', ticks=''))
     return(p1)
   })
   
